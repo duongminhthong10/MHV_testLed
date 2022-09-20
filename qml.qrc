@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>image/back_button.png</file>
+        <file>image/bg_main.png</file>
+        <file>image/bg_pig.jpg</file>
+        <file>image/logo.png</file>
+        <file>Mainview.qml</file>
+        <file>CustomButton.qml</file>
+        <file>TextInputCustom.qml</file>
+    </qresource>
+</RCC>
