@@ -19,11 +19,11 @@ ApplicationWindow {
     }
 
     /* Main View*/
-    StackView {
-        id: mainStackView
-        anchors.fill: parent
-        initialItem: Mainview{}
-    }
+//    StackView {
+//        id: mainStackView
+//        anchors.fill: parent
+//        initialItem: Mainview{}
+//    }
 
 
 }
