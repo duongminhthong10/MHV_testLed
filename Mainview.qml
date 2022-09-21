@@ -38,20 +38,13 @@ Item {
             NumberAnimation {duration: 1000}
         }
     }
-    /*Icon exit*/
-    Image {
-        id: exitBtn
-        width: wH * 0.044
-        height: wH * 0.044
-        source: "image/back_button.png"
+    /*Icon back and home*/
+    BackButton {
+        id: btnBack
         anchors { bottom: parent.bottom; bottomMargin: wH * 0.02; right: parent.right; rightMargin: wW * 0.02 }
-        MouseArea
-        {
-            anchors.fill: parent
-            onClicked: {
-                appwindow.close()
-            }
-        }
+    }
+    HomeButton {
+        anchors {bottom: parent.bottom; bottomMargin: wH * 0.02; right: btnBack.left; rightMargin: wW * 0.01}
     }
 
     /*Khoi cac option*/
@@ -66,190 +59,88 @@ Item {
             NumberAnimation {duration: 500}
         }
         Column {
-            spacing: 5
-            add: Transition {
-                NumberAnimation {properties: "opacity"; duration: 500; from: 0; to : 1} // hieu ung khi click
-            }
+            spacing: 6
             CustomButton {
-                id: onlyLed
-                width: wW * 0.19
+                id: controlBlockOnly
+                width: wW * 0.2
                 height: wH * 0.06
                 checkable: true
-                text: "ON/OFF từng Led"
-                onClicked: {
-                    manyLed.checked = false
-                    randomLed.checked = false
-                    fullLed.checked = false
+                text: "Điều khiển từng khối"
+                onClicked:
+                {
+                    animationLed.checked = false
                 }
             }
-            Row {
-                id: onlyLedOption
-                visible: (onlyLed.checked) ? true : false
-                spacing: 5
-                anchors.horizontalCenter:onlyLed.horizontalCenter
-                TextInputCustom {
-                    id: textInput_ledOnly
-                    width: wW * 0.06
-                    height: wH * 0.04
-                }
-                CustomButton {
-                    height: wH * 0.04
-                    width: wW * 0.04
-                    text: "ON"
-                    property string insertTxt: ""
-                    property string inputTxt: textInput_ledOnly.text
-                    property string test: inputTxt.charAt(0)
-                    onClicked:
-                    {
-                        console.log(inputTxt)
-                        switch (test)
-                        {
-                        case "T":
-                            console.log("sang " +  inputTxt.substring(1))
-                            break
-                        default:
-                            console.log("Default")
-                            for (var i = 0; i < inputTxt; i++)
-                            {
-                                insertTxt = insertTxt + "0"
-                            }
-                            sentData("DKTC0" + insertTxt + "1");
-                            insertTxt = ""
-                        }
-                    }
-                }
-                CustomButton {
-                    height: wH * 0.04
-                    width: wW * 0.04
-                    text: "OFF"
-                    property string insertTxt: ""
-                    property string inputTxt: textInput_ledOnly.text
-                    property string test: inputTxt.charAt(0)
-                    onClicked:
-                    {
-                        console.log(inputTxt)
-                        switch (test)
-                        {
-                        case "T":
-                            console.log("tat " +  inputTxt.substring(1))
-                            break
-                        default:
-                            console.log("Default")
-                            for (var i = 0; i < inputTxt; i++)
-                            {
-                                insertTxt = insertTxt + "0"
-                            }
-                            sentData("DKTC0" + insertTxt + "0");
-                            insertTxt = ""
-                        }
+            Grid {
+                columns: 2
+                spacing: 4
+                anchors.horizontalCenter: controlBlockOnly.horizontalCenter
+                visible: controlBlockOnly.checked ? true : false
+                Repeater {
+                    model: 10
+                    property int index1
+                    CustomButton {
+                        width: wW * 0.056
+                        height: wH * 0.034
+                        text: "HH" + parseInt(index + 1)
                     }
                 }
             }
         }
         Column {
             spacing: 6
-            add: Transition {
-                NumberAnimation {properties: "opacity"; duration: 500; from: 0; to : 1} // hieu ung khi click
-            }
             CustomButton {
-                id: manyLed
-                width: wW * 0.19
+                id: animationLed
+                width: wW * 0.2
                 height: wH * 0.06
                 checkable: true
-                text: "ON/OFF nhiều Led"
+                text: "Các hiệu ứng Led"
                 onClicked: {
-                    onlyLed.checked = false
-                    randomLed.checked = false
-                    fullLed.checked = false
+                    controlBlockOnly.checked = false
                 }
             }
-            Row {
-                visible: (manyLed.checked) ? true : false
-                anchors.horizontalCenter:manyLed.horizontalCenter
-                spacing: 9
-                TextInputCustom {
-                    id: inputLedFrom
-                    width: wW * 0.06
-                    height: wH * 0.04
-                }
-                Text {
-                    id: name
-                    text: qsTr("đến")
-                    color: "#ffc000"
-                    font.pixelSize: inputLedTo.height / 2
-                    anchors.verticalCenter: inputLedFrom.verticalCenter
-                }
-                TextInputCustom {
-                    id: inputLedTo
-                    width: wW * 0.06
-                    height: wH * 0.04
-                }
-            }
-            Row {
-                visible: (manyLed.checked) ? true : false
-                anchors.horizontalCenter:manyLed.horizontalCenter
-                spacing: 10
+            Column {
+                id: animationOption
+                spacing: 12
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: animationLed.checked ? true :false
                 CustomButton {
-                    height: wH * 0.04
-                    width: wW * 0.04
-                    text: "ON"
-                }
-                CustomButton {
-                    height: wH * 0.04
-                    width: wW * 0.04
-                    text: "OFF"
-                }
-            }
-
-        }
-        Column {
-            spacing: 6
-            CustomButton {
-                id: randomLed
-                width: wW * 0.19
-                height: wH * 0.06
-                checkable: true
-                text: "ON/OFF Random"
-                onClicked: {
-                    onlyLed.checked = false
-                    manyLed.checked = false
-                    fullLed.checked = false
-                    if(randomLed.checked) // neu ON thi gui
+                    id: fullLed
+                    width: wW * 0.12
+                    height: wH * 0.034
+                    text: checked ? "TẮT TOÀN BỘ" : "BẬT TOÀN BỘ"
+                    checkable: true
+                    font.bold: false
+                    onClicked:
                     {
-                        //TCPClient.connectToServer()
+                        if(fullLed.checked) // neu ON thi gui
+                        {
+                            sentData("AAA1")
+                        }
+                        else // neu off thi gui
+                        {
+                            sentData("AAA0")
+                        }
+                    }
+                }
+                CustomButton {
+                    width: wW * 0.12
+                    height: wH * 0.034
+                    text: "SÁNG TỪNG TẦNG"
+                    font.bold: false
+                }
+                CustomButton {
+                    id: randomLed
+                    width: wW * 0.12
+                    height: wH * 0.034
+                    text: "SÁNG NGẪU NHIÊN"
+                    font.bold: false
+                    onClicked:
+                    {
                         sentData("HU01")
-
-                    }
-                    else // neu off thi gui
-                    {
-                        sentData("AAA0")
-                    }
-                }
-            }
-        }
-        Column {
-            spacing: 6
-            CustomButton {
-                id: fullLed
-                width: wW * 0.19
-                height: wH * 0.05
-                checkable: true
-                text: "ON/OFF FULL"
-                onClicked: {
-                    onlyLed.checked = false
-                    randomLed.checked = false
-                    manyLed.checked = false
-                    if(fullLed.checked) // neu ON thi gui
-                    {
-                        sentData("AAA1")
-                    }
-                    else // neu off thi gui
-                    {
-                        sentData("AAA0")
                     }
                 }
             }
         }
     }
-
 }

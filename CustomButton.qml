@@ -7,7 +7,7 @@ Button {
         border.width: (parent.pressed || parent.checked) ? 2 : 1
         border.color: "#ffc000"
         opacity: enabled ? 1.0 : 0.3
-        color: (parent.pressed || parent.checked) ? "#605E3F" : "transparent"
+        color: "transparent"
 
         Timer {
             id: refresh

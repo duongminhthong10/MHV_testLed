@@ -8,5 +8,8 @@
         <file>Mainview.qml</file>
         <file>CustomButton.qml</file>
         <file>TextInputCustom.qml</file>
+        <file>HomeButton.qml</file>
+        <file>image/home_button.png</file>
+        <file>BackButton.qml</file>
     </qresource>
 </RCC>

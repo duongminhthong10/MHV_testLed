@@ -12,6 +12,12 @@ ApplicationWindow {
 
     property alias wW: appwindow.width
     property alias wH: appwindow.height
+    property int block: 1
+    function blockOption()
+    {
+        block = block + 1
+    }
+
     function sentData(txt)
     {
 
@@ -19,11 +25,9 @@ ApplicationWindow {
     }
 
     /* Main View*/
-//    StackView {
-//        id: mainStackView
-//        anchors.fill: parent
-//        initialItem: Mainview{}
-//    }
-
-
+    StackView {
+        id: mainStackView
+        anchors.fill: parent
+        initialItem: Mainview{}
+    }
 }
