@@ -1,16 +1,15 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Controls 2.15
 
 Item {
     /*Menu*/
     id: menu
-    anchors.fill: parent
     /*Anh nen*/
     Image {
         anchors.fill: parent
         source: "image/bg_main.png"
     }
-
+    focus: true
     Image {
         anchors {fill: parent; rightMargin: wW * 0.22}
         source: "image/bg_pig.jpg"
@@ -41,6 +40,11 @@ Item {
     /*Icon back and home*/
     BackButton {
         id: btnBack
+        onClicked:
+        {
+            appwindow.close()
+        }
+
         anchors { bottom: parent.bottom; bottomMargin: wH * 0.02; right: parent.right; rightMargin: wW * 0.02 }
     }
     HomeButton {
@@ -59,6 +63,9 @@ Item {
             NumberAnimation {duration: 500}
         }
         Column {
+            add: Transition {
+                NumberAnimation { properties: "opacity"; duration: 500; from: 0; to: 1 }
+            }
             spacing: 6
             CustomButton {
                 id: controlBlockOnly
@@ -74,20 +81,31 @@ Item {
             Grid {
                 columns: 2
                 spacing: 4
-                anchors.horizontalCenter: controlBlockOnly.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 visible: controlBlockOnly.checked ? true : false
                 Repeater {
                     model: 10
-                    property int index1
                     CustomButton {
+                        id: indexBlock
                         width: wW * 0.056
                         height: wH * 0.034
                         text: "HH" + parseInt(index + 1)
+                        onClicked: {
+                            blockName = indexBlock.text
+                            mainStackView.push("BlockView.qml")
+                            connectIP(staticIP + parseInt(index + 150))
+                            console.log("IP: " + staticIP + parseInt(index + 150))
+                            sentData("anhthongbadao2k" + index)
+                            //console.log(staticIP + parseInt(index))
+                        }
                     }
                 }
             }
         }
         Column {
+            add: Transition {
+                NumberAnimation { properties: "opacity"; duration: 500; from: 0; to: 1 }
+            }
             spacing: 6
             CustomButton {
                 id: animationLed

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Controls 2.15
 
 Button {
@@ -6,9 +6,9 @@ Button {
         anchors.fill: parent
         border.width: (parent.pressed || parent.checked) ? 2 : 1
         border.color: "#ffc000"
+        color: parent.pressed ? "#CCCC33" : "transparent"
         opacity: enabled ? 1.0 : 0.3
-        color: "transparent"
-
+        //color: "transparent"
         Timer {
             id: refresh
             interval: 200
@@ -16,7 +16,6 @@ Button {
                 parent.update()
             }
         }
-
         Component.onCompleted: refresh.start()
     }
     contentItem: Text {
@@ -26,7 +25,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
-    font.family: "Bunito Sans"
+    font.family: "Nunito Sans"
     font.bold: checked ? true : false
     font.pixelSize: height * 0.5
 }

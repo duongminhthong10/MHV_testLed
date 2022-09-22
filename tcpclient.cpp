@@ -15,7 +15,7 @@ tcpclient::tcpclient(QObject *parent)
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 
     //    connect(socket, SIGNAL(disconnected()), this, SLOT(connectToServer()));
-    connectToServer();
+    //connectToServer();
     //qDebug() << "Anh Thong ba dao 2k";
 }
 
@@ -29,6 +29,8 @@ void tcpclient::send(QString msg)
         socket->write(msg.toUtf8());
         socket->waitForBytesWritten();
         sent = msg;
+        // moi them
+        socket->disconnectFromHost();
     }
     else
     {
@@ -41,6 +43,22 @@ void tcpclient::exit()
 {
     send("exit");
     socket->close();
+}
+
+void tcpclient::connectServer(QString server)
+{
+    socket->connectToHost(server, 8888);
+    if(socket->waitForConnected(150))
+    {
+        foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+                qDebug() << address.toString();
+        }
+    }
+    else
+    {
+        qDebug() << "Not connected!";
+    }
 }
 
 bool tcpclient::checkConnect()

@@ -11,7 +11,8 @@ public:
     explicit tcpclient(QObject *parent = nullptr);
     Q_INVOKABLE void send(QString msg);
     Q_INVOKABLE void exit();
-    //Q_INVOKABLE void connectToServer();
+//    Q_INVOKABLE void connectToServer();
+    Q_INVOKABLE void connectServer(QString server);
     Q_INVOKABLE bool checkConnect();
 signals:
     void messagesReceived(QString msg);

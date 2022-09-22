@@ -11,5 +11,6 @@
         <file>HomeButton.qml</file>
         <file>image/home_button.png</file>
         <file>BackButton.qml</file>
+        <file>BlockView.qml</file>
     </qresource>
 </RCC>

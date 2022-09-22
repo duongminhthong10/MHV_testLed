@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Controls 2.15
 
 Item {
@@ -9,10 +9,11 @@ Item {
         anchors.fill: parent
         color: "transparent"
         border.color: "#ffc000"
-        TextInput
+        Text
         {
             id: textEdit
             anchors.fill: parent
+            //text: parent.text
             color: "#ffc000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -24,7 +25,6 @@ Item {
                 }
             }
         }
-
     }
 }
 

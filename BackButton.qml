@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 
 CustomButton {
     width: wH * 0.044
@@ -7,5 +7,5 @@ CustomButton {
         anchors.fill: parent
         source: "image/back_button.png"
     }
-    onClicked: appwindow.close()
+    onClicked: mainStackView.pop()
 }

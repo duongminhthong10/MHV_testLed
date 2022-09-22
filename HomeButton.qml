@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 
 CustomButton {
     width: wH * 0.044
