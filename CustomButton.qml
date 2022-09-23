@@ -6,9 +6,9 @@ Button {
         anchors.fill: parent
         border.width: (parent.pressed || parent.checked) ? 2 : 1
         border.color: "#ffc000"
-        color: parent.pressed ? "#CCCC33" : "transparent"
+        //color: parent.pressed ? "#CCCC33" : "transparent"
         opacity: enabled ? 1.0 : 0.3
-        //color: "transparent"
+        color: "transparent"
         Timer {
             id: refresh
             interval: 200

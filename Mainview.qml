@@ -94,7 +94,7 @@ Item {
                         onClicked: {
                             blockName = indexBlock.text
                             mainStackView.push("BlockView.qml")
-                            chonToa = parseInt(index + 1)
+                            chonToa = parseInt(index)
                         }
                     }
                 }

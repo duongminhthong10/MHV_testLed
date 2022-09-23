@@ -2,7 +2,7 @@ import QtQuick 2.9
 
 Item {
     /*Key input*/
-    Keys.onReleased:
+    Keys.onPressed:
     {
         if (event.key === Qt.Key_Backspace)
         {
@@ -80,9 +80,9 @@ Item {
                     onClicked: {
                         //console.log(inPutFloor.text)
                         chonNha = parseInt(inPutFloor.text)
-                        console.log(chonNha)
-                        console.log(chonToa)
-                        TCPClient.sendOnly(chonToa, "", chonNha)
+                        console.log("HH: " + chonNha)
+                        console.log("NUmber: " + chonToa)
+                        TCPClient.sendOnly(chonToa,chonNha)
                         inPutFloor.text = ""
                     }
                 }
@@ -90,6 +90,9 @@ Item {
                     height: wH * 0.06
                     width: wW * 0.05
                     text: "OFF"
+                    onClicked: {
+                        inPutFloor.text = ""
+                    }
                 }
             }
             Grid
