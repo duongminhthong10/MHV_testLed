@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.15
+import QtQuick.Controls 2.4
 
 Button {
     background: Rectangle {
@@ -22,10 +22,11 @@ Button {
         text: parent.text
         font: parent.font
         color: "#ffc000"
+        opacity: enabled ? 1.0 : 0.3
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
     font.family: "Nunito Sans"
     font.bold: checked ? true : false
-    font.pixelSize: height * 0.5
+    font.pixelSize:  height * 0.5
 }

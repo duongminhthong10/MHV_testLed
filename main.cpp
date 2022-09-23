@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    tcpclient tcpClient;
+    TcpClient tcpClient;
     engine.rootContext()->setContextProperty("TCPClient", &tcpClient);
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

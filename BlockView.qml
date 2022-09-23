@@ -78,7 +78,11 @@ Item {
                     width: wW * 0.05
                     text: "ON"
                     onClicked: {
-                        console.log(inPutFloor.text)
+                        //console.log(inPutFloor.text)
+                        chonNha = parseInt(inPutFloor.text)
+                        console.log(chonNha)
+                        console.log(chonToa)
+                        TCPClient.sendOnly(chonToa, "", chonNha)
                         inPutFloor.text = ""
                     }
                 }

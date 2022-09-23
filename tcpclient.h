@@ -4,20 +4,20 @@
 #include <QObject>
 #include <QTcpSocket>
 
-class tcpclient : public QObject
+class TcpClient : public QObject
 {
     Q_OBJECT
 public:
-    explicit tcpclient(QObject *parent = nullptr);
+    explicit TcpClient(QObject *parent = nullptr);
     Q_INVOKABLE void send(QString msg);
+    Q_INVOKABLE void sendOnly(int num, QString msg, int inputNum);
     Q_INVOKABLE void exit();
-//    Q_INVOKABLE void connectToServer();
-    Q_INVOKABLE void connectServer(QString server);
-    Q_INVOKABLE bool checkConnect();
+
 signals:
     void messagesReceived(QString msg);
     void tcpError();
     void tcpConnected();
+
 public slots:
     void connected();
     void disconnected();
@@ -25,11 +25,17 @@ public slots:
     void hostFound();
     void bytesWritten(qint64 bytes);
     void readyRead();
+    QString intToQString(int a[120]);
+    QString formatRequest(QString msg);
+    QByteArray toByteArray(QString &stringList);
 private slots:
     void connectToServer();
-private:
-    QTcpSocket *socket;
-};
+    void onlyConnectServer(int num);
+    void onlyExit(int num);
 
+private:
+    QTcpSocket *client1, *client2, *client3, *client4, *client5, *client6, *client7, *client8, *client9, *client10;
+    QTcpSocket *client;
+};
 
 #endif // TCPCLIENT_H

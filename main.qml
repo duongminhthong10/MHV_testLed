@@ -13,18 +13,11 @@ ApplicationWindow {
     property alias wW: appwindow.width
     property alias wH: appwindow.height
     property string blockName: ""
-    property string staticIP: "192.168.1."
-    function blockOption()
-    {
-        block = block + 1
-    }
+    property int chonToa
+    property int chonNha
     function sentData(txt)
     {
         TCPClient.send(txt)
-    }
-    function connectIP(server)
-    {
-        TCPClient.connectServer(server)
     }
     /* Main View*/
     StackView {
@@ -63,5 +56,11 @@ ApplicationWindow {
                 duration: 300
             }
         }
+    }
+    Loader{
+        sourceComponent: {
+            /* Run when the app is opening */
+        }
+
     }
 }

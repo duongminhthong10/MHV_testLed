@@ -81,6 +81,7 @@ Item {
             Grid {
                 columns: 2
                 spacing: 4
+                flow: Grid.LeftToRight
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: controlBlockOnly.checked ? true : false
                 Repeater {
@@ -93,10 +94,7 @@ Item {
                         onClicked: {
                             blockName = indexBlock.text
                             mainStackView.push("BlockView.qml")
-                            connectIP(staticIP + parseInt(index + 150))
-                            console.log("IP: " + staticIP + parseInt(index + 150))
-                            sentData("anhthongbadao2k" + index)
-                            //console.log(staticIP + parseInt(index))
+                            chonToa = parseInt(index + 1)
                         }
                     }
                 }

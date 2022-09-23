@@ -2,144 +2,189 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 #include <QThread>
-tcpclient::tcpclient(QObject *parent)
-    : QObject{parent}
+
+int Cong1[120]={0};
+int Cong2[120]={0};
+int Cong[2][120] = {{0},{0}};
+
+TcpClient::TcpClient(QObject *parent) : QObject(parent)
 {
-    socket = new QTcpSocket(this);
+    client1=new QTcpSocket(this);
+    client2=new QTcpSocket(this);
+    client3=new QTcpSocket(this);
+    client4=new QTcpSocket(this);
+    client5=new QTcpSocket(this);
+    client6=new QTcpSocket(this);
+    client7=new QTcpSocket(this);
+    client8=new QTcpSocket(this);
+    client9=new QTcpSocket(this);
+    client10=new QTcpSocket(this);
 
-    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-    connect(socket, SIGNAL(hostFound()), this, SLOT(hostFound()));
-    connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-
-    //    connect(socket, SIGNAL(disconnected()), this, SLOT(connectToServer()));
-    //connectToServer();
-    //qDebug() << "Anh Thong ba dao 2k";
+    client = new QTcpSocket[10];
+    qDebug() << "ANh Thong ba dao 2k";
 }
 
-void tcpclient::send(QString msg)
+void TcpClient::send(QString msg)
 {
-    if (checkConnect())
-    {
-        static QString sent;
-        if (sent == msg) return;
-        QThread::msleep(100);
-        socket->write(msg.toUtf8());
-        socket->waitForBytesWritten();
-        sent = msg;
-        // moi them
-        socket->disconnectFromHost();
-    }
-    else
-    {
-        qDebug () << "khong ket noi";
-    }
-//    socket->disconnect();
+    connectToServer();
+    static QString sent;
+    if (sent == msg) return;
+    QThread::msleep(100);
+
+//    client1->write(msg.toUtf8());
+//    client2->write(msg.toUtf8());
+//    client3->write(msg.toUtf8());
+//    client4->write(msg.toUtf8());
+//    client5->write(msg.toUtf8());
+//    client6->write(msg.toUtf8());
+//    client7->write(msg.toUtf8());
+//    client8->write(msg.toUtf8());
+//    client9->write(msg.toUtf8());
+//    client10->write(msg.toUtf8());
+    (client + 1)->write(msg.toUtf8());
+    //(socket+i)->waitForBytesWritten();
+    sent = msg;
+    exit();
+
 }
 
-void tcpclient::exit()
+void TcpClient::sendOnly(int num, QString msg, int inputNum)
 {
-    send("exit");
-    socket->close();
+    onlyConnectServer(num);
+    Cong[num][inputNum - 1] = 1;
+    QString mess = intToQString(Cong[num]);
+    QString tempStr=formatRequest(mess);
+    //QByteArray ms=toByteArray(tempStr);
+    qDebug() <<"test"<<Cong<< mess;
+
+    client1->write(tempStr.toUtf8());
+    onlyExit(num);
+    Cong[num][inputNum - 1] = 0;
 }
 
-void tcpclient::connectServer(QString server)
+void TcpClient::exit()
 {
-    socket->connectToHost(server, 8888);
-    if(socket->waitForConnected(150))
-    {
-        foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-                qDebug() << address.toString();
-        }
-    }
-    else
-    {
-        qDebug() << "Not connected!";
-    }
+    //send("exit");
+    client1->close();
+    client2->close();
+    client3->close();
+    client4->close();
+    client5->close();
+    client6->close();
+    client7->close();
+    client8->close();
+    client9->close();
+    client10->close();
 }
 
-bool tcpclient::checkConnect()
-{
-    if (socket->state() == QAbstractSocket::ConnectedState)
-    {
-        return true;
-    }
-    else
-    {
-        socket->connectToHost("192.168.1.150", 8888);
-//        socket->connectToHost("172.31.99.202", 88);
-        if(socket->waitForConnected(150))
-        {
-            qDebug() << "connect!";
-            return true;
-
-        }
-        else
-        {
-            qDebug() << "not connect";
-            return false;
-        }
-    }
-}
-void tcpclient::connected()
+void TcpClient::connected()
 {
     qDebug() << "Connected.\n";
     //socket->write("Hello server.\n");
     emit tcpConnected();
 }
 
-void tcpclient::disconnected()
+void TcpClient::disconnected()
 {
     qDebug() << "Disconnected.\n";
 }
 
-void tcpclient::error(QAbstractSocket::SocketError socketError)
+void TcpClient::error(QAbstractSocket::SocketError socketError)
 {
-    Q_UNUSED(socketError)
-    QString errorStr = socket->errorString();
-    qDebug() << "An error occured: " + errorStr;
-    emit tcpError();
+    //    Q_UNUSED(socketError)
+    //    QString errorStr = socket->errorString();
+    //    qDebug() << "An error occured: " + errorStr;
+    //    emit tcpError();
 }
 
-void tcpclient::hostFound()
+void TcpClient::hostFound()
 {
     qDebug() << "Host found.\n";
 }
 
-void tcpclient::bytesWritten(qint64 bytes)
+void TcpClient::bytesWritten(qint64 bytes)
 {
     QString outString = QString::number(bytes) + " bytes writen.";
     qDebug() << outString;
 }
 
-void tcpclient::readyRead()
+void TcpClient::readyRead()
 {
-    qint64 bytes = socket->bytesAvailable();
-    qDebug() << QString::number(bytes)+ " for you to read";
-    /*
-     * When you read data from a socket, data is also removed from the socket buffer space.
-     */
-    QByteArray ba = socket->readAll();
-    emit messagesReceived(ba);
+    //    qint64 bytes = socket->bytesAvailable();
+    //    qDebug() << QString::number(bytes)+ " for you to read";
+    //    /*
+    //     * When you read data from a socket, data is also removed from the socket buffer space.
+    //     */
+    //    QByteArray ba = socket->readAll();
+    //    emit messagesReceived(ba);
 }
 
-void tcpclient::connectToServer()
+QString TcpClient::intToQString(int a[120])
 {
-    socket->connectToHost("192.168.1.150", 8888);
-//    socket->connectToHost("172.31.99.202", 88);
-    if(socket->waitForConnected(150))
+    QString My_String;
+    for(int i=0; i < 120; i++)
     {
-        foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-                qDebug() << address.toString();
-        }
+        My_String.append(QString::number(a[i]));
     }
-    else
-    {
-        qDebug() << "Not connected!";
-    }
+    return My_String;
+}
 
+QString TcpClient::formatRequest(QString msg)
+{
+    QString str = "DKTC_"+msg;
+    return str;
+}
+
+QByteArray TcpClient::toByteArray(QString &stringList)
+{
+    QByteArray msg=stringList.toUtf8();
+    return msg;
+}
+
+void TcpClient::connectToServer()
+{
+//    client1->connectToHost("192.168.1.150", 8888);
+//    client2->connectToHost("192.168.1.151", 8888);
+//    client3->connectToHost("192.168.1.152", 8888);
+//    client4->connectToHost("192.168.1.153", 8888);
+//    client5->connectToHost("192.168.1.154", 8888);
+//    client6->connectToHost("192.168.1.155", 8888);
+//    client7->connectToHost("192.168.1.156", 8888);
+//    client8->connectToHost("192.168.1.157", 8888);
+//    client9->connectToHost("192.168.1.158", 8888);
+//    client10->connectToHost("192.168.1.159", 8888);
+    for (int i = 0; i < 10 ; i++)
+    {
+        (client + i)->connectToHost("192.168.0." + QString::number(150 + i), 8888);
+    }
+}
+
+void TcpClient::onlyConnectServer(int num)
+{
+    switch (num) {
+    case 1:
+        client1->connectToHost("192.168.1.150", 8888);
+        break;
+    case 2:
+        client2->connectToHost("192.168.1.151", 8888);
+    case 3:
+        client3->connectToHost("192.168.1.152", 8888);
+    default:
+        break;
+    }
+}
+
+void TcpClient::onlyExit(int num)
+{
+    switch (num) {
+    case 1:
+        client1->connectToHost("192.168.1.150", 8888);
+        break;
+    case 2:
+        client2->connectToHost("192.168.1.151", 8888);
+    case 3:
+        client3->connectToHost("192.168.1.152", 8888);
+    default:
+        break;
+    }
 }

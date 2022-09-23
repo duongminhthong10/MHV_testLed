@@ -1,5 +1,9 @@
 QT += quick
-
+QT += core gui
+QT +=sql
+QT +=network
+QT += multimedia
+QT += widgets multimediawidgets
 CONFIG += c++11
 
 CONFIG += resources_big # De cho phep load file resource nang
@@ -11,7 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        tcpclient.cpp
+    tcpclient.cpp
 
 RESOURCES += qml.qrc
 
